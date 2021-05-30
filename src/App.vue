@@ -2,17 +2,20 @@
   <div>
     <img alt="Vue logo" src="./assets/logo.png">
     <button @click="test" >Test</button>
+    <Test></Test>
     <Kanban :tasks="tasks" :columns="columns"/>
   </div>
 </template>
 
 <script>
-import Kanban from './components/Kanban.vue'
+import Test from './components/Test.vue';
+import Kanban from './components/Kanban.vue';
 
 export default {
   name: 'App',
   components: {
-    Kanban
+    Kanban,
+    Test
   },
   data() {
     return {
