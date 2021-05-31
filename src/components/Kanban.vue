@@ -3,7 +3,7 @@
     <draggable
       class="kanban-sheet"
       v-model="dataColumns"
-      v-bind="dragOptions"
+      v-bind="columnDragOptions"
       @start="columnDragStart"
       @end="columnDragEnd"
       @change="updateListSortOrder"
@@ -44,10 +44,10 @@ export default {
     };
   },
   computed: {
-    dragOptions() {
+    columnDragOptions() {
       return {
         animation: 200,
-        group: "description",
+        group: "columns",
         disabled: false,
         ghostClass: "ghost",
         draggable: ".kanban-column",
