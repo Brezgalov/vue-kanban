@@ -2,22 +2,20 @@
   <div>
     <draggable
       class="kanban-sheet"
-      v-model="columns"
+      v-model="dataColumns"
       v-bind="dragOptions"
-      @start="drag = true"
-      @end="drag = false"
+      @start="columnDragStart"
+      @end="columnDragEnd"
+      @change="updateListSortOrder"
     >
       <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-        <div class="kanban-column" v-for="element in columns" :key="element.order">
-          <div class="kanban-column-head">{{ element.name }}</div>
-          <div class="kanban-column-body">
-            <template v-for="task in tasks">
-              <div class="kanban-task" :key="task.id">
-                ({{ task.order }}) {{ task.text }}
-              </div>
-            </template>
-          </div>
-        </div>
+        <column 
+          v-for="column in dataColumns" 
+          :key="column.id"
+          :name="column.name"
+          :order="column.order"
+          :tasks="dataTasks"
+        ></column>
       </transition-group>
     </draggable>
   </div>
@@ -25,16 +23,23 @@
 
 <script>
 import draggable from "vuedraggable";
+import Column from './kanban/Column.vue';
 
 export default {
-  components: { draggable },
+  components: { Column, draggable },
   name: 'Kanban',
   props: {
     columns: Array,
     tasks: Array,
   },
+  mounted() {
+    this.dataColumns = this.columns;
+    this.dataTasks = this.tasks;
+  },
   data() {
     return {
+      dataColumns: [],
+      dataTasks: [],
       drag: false
     };
   },
@@ -46,23 +51,36 @@ export default {
         disabled: false,
         ghostClass: "ghost",
         draggable: ".kanban-column",
-        handle: ".kanban-column-head"
+        handle: ".kanban-column-head",
       };
     }
+  },
+  methods: {
+    columnDragStart() {
+      this.drag = true;
+    },
+    columnDragEnd() {
+      this.drag = false;
+      console.log(this.dataColumns);
+    },
+    updateListSortOrder() {
+      const newList = [...this.dataColumns].map((item, index) => {
+        const newSort = index + 1;
+        // also add in a new property called has changed if you want to style them / send an api call
+        item.hasChanged = item.order !== newSort;
+        if (item.hasChanged) {
+          item.order = newSort;
+        }
+        return item;
+      });
+      
+      this.dataColumns = newList;
+    },
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .kanban-sheet {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-  .kanban-column {
-    width: 24%;
-    padding: .5%;
-  }
+  
 </style>
