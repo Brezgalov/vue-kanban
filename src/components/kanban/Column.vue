@@ -4,7 +4,8 @@
     <div class="kanban-column-body">
       <template v-for="task in tasks">
         <div class="kanban-task" :key="task.id">
-          ({{ task.order }}) {{ task.text }}
+          <div class="kanban-task-head">{{ task.title }} ({{ task.order }})</div>
+          <div class="kanban-task-body">{{ task.description }}</div>
         </div>
       </template>
     </div>

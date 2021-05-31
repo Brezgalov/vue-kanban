@@ -15,46 +15,64 @@ export default {
     Kanban
   },
   data() {
-    return {
-      columns: [
+    let columns = [
+      {
+        id: 4,
+        name: 'Ready',
+        order: 3,
+      },
+      {
+        id: 1,
+        name: 'Waiting',
+        order: 0,
+      },
+      {
+        id: 3,
+        name: 'Testing',
+        order: 2,
+      },
+      {
+        id: 2,
+        name: 'Active',
+        order: 1,
+      },
+    ];
+
+    let tasks = [];
+    let tasksIdIncrement = 1;
+    let tasksPattern = [
         {
-          id: 4,
-          name: 'Ready',
-          order: 3,
-        },
-        {
-          id: 1,
-          name: 'Waiting',
-          order: 0,
-        },
-        {
-          id: 3,
-          name: 'Testing',
-          order: 2,
-        },
-        {
-          id: 2,
-          name: 'Active',
-          order: 1,
-        },
-      ],
-      tasks: [
-        {
-          id: 1,
-          text: "lorem ipsum dollar sit amet 1",
+          title: "Task 1",
+          description: "lorem ipsum dollar sit amet",
           order: 1
         },
         {
-          id: 2,
-          text: "lorem ipsum dollar sit amet 2",
+          title: "Task 2",
+          description: "lorem ipsum dollar sit amet",
           order: 2
         },
         {
-          id: 3,
-          text: "lorem ipsum dollar sit amet 3",
+          title: "Task 3",
+          description: "lorem ipsum dollar sit amet",
           order: 3
         },
-      ],
+    ];
+
+    columns.forEach(function(column) {
+      tasksPattern.forEach(function(taskPattern) {
+        tasks.push({
+          id: tasksIdIncrement++,
+          column_id: column.id,
+          title: "Column #" + column.name + " " + taskPattern.title,
+          description: taskPattern.description,
+          order: taskPattern.order
+        });
+      });
+    });
+
+    return {
+      columns: columns,
+      tasks: tasks,
       accessToken: "123",
       apiBaseUrl: "321"
     };
@@ -80,21 +98,39 @@ export default {
 
 <style>
 .kanban-sheet > span {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100%;
-  }
-  .kanban-column {
-    width: 24%;
-    padding: .5%;
-  }
-
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+}
+.kanban-column {
+  width: 24%;
+  margin-left: .5%;
+  margin-right: .5%;
+  border: 1px solid black;
+}
 .kanban-column-head {
-  padding: 3px;
-  font-size: 18px;
+  padding: 5px;
+  font-size: 20px;
   background-color: red;
+}
+.kanban-column-body {
+  padding: 5px;
+}
+.kanban-task {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.kanban-task-head {
+  padding: 5px;
+  font-size: 16px;
+  background-color: black;
+  color: white;
+}
+.kanban-task-body {
+  padding: 5px;
+  border: 1px solid black;
 }
 
 .button {

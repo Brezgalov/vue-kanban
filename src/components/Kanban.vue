@@ -14,7 +14,7 @@
           :key="column.id"
           :name="column.name"
           :order="column.order"
-          :tasks="dataTasks"
+          :tasks="getTasksForColumn(column.id)"
         ></column>
       </transition-group>
     </draggable>
@@ -56,6 +56,9 @@ export default {
     }
   },
   methods: {
+    getTasksForColumn(id) {
+      return this.dataTasks.filter(task => task.column_id === id);
+    },
     columnDragStart() {
       this.drag = true;
     },
@@ -73,7 +76,7 @@ export default {
         }
         return item;
       });
-      
+
       this.dataColumns = newList;
     },
   }
