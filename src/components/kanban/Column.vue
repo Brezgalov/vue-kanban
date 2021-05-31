@@ -1,7 +1,13 @@
 <template>
     <div class="kanban-column">
-        <div class="kanban-column-name">{{ name }}</div>
-        {{ order }}
+      <div class="kanban-column-head">{{ name }}</div>
+      <div class="kanban-column-body">
+        <template v-for="task in tasks">
+          <div class="kanban-task" :key="task.id">
+            ({{ task.order }}) {{ task.text }}
+          </div>
+        </template>
+      </div>
     </div>
 </template>
 

@@ -1,19 +1,33 @@
 <template>
-  <div class="kanban-sheet">
-    <column 
-      v-for="column in columns" 
-      :key="column.id" 
-      :name="column.name"
-      :order="column.order"
-    ></column>
+  <div>
+    <draggable
+      class="kanban-sheet"
+      v-model="columns"
+      v-bind="dragOptions"
+      @start="drag = true"
+      @end="drag = false"
+    >
+      <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+        <div class="kanban-column" v-for="element in columns" :key="element.order">
+          <div class="kanban-column-head">{{ element.name }}</div>
+          <div class="kanban-column-body">
+            <template v-for="task in tasks">
+              <div class="kanban-task" :key="task.id">
+                ({{ task.order }}) {{ task.text }}
+              </div>
+            </template>
+          </div>
+        </div>
+      </transition-group>
+    </draggable>
   </div>
 </template>
 
 <script>
-import Column from './kanban/Column.vue';
+import draggable from "vuedraggable";
 
 export default {
-  components: { Column },
+  components: { draggable },
   name: 'Kanban',
   props: {
     columns: Array,
@@ -21,7 +35,20 @@ export default {
   },
   data() {
     return {
+      drag: false
     };
+  },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost",
+        draggable: ".kanban-column",
+        handle: ".kanban-column-head"
+      };
+    }
   }
 }
 </script>

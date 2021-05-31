@@ -13,7 +13,7 @@
           <div class="kanban-column-body">
             <template v-for="task in tasks">
               <div class="kanban-task" :key="task.id">
-                {{ task.text }}
+                ({{ task.order }}) {{ task.text }}
               </div>
             </template>
           </div>
@@ -49,15 +49,18 @@ export default {
       tasks: [
         {
           id: 1,
-          text: "lorem ipsum dollar sit amet 1"
+          text: "lorem ipsum dollar sit amet 1",
+          order: 1
         },
         {
           id: 2,
-          text: "lorem ipsum dollar sit amet 2"
+          text: "lorem ipsum dollar sit amet 2",
+          order: 2
         },
         {
           id: 3,
-          text: "lorem ipsum dollar sit amet 3"
+          text: "lorem ipsum dollar sit amet 3",
+          order: 3
         },
       ],
       list: message.map((name, index) => {
