@@ -63,7 +63,7 @@ export default {
         tasks.push({
           id: tasksIdIncrement++,
           column_id: column.id,
-          title: "Column #" + column.name + " " + taskPattern.title,
+          title: "Column #" + column.name + " / " + taskPattern.title,
           description: taskPattern.description,
           order: taskPattern.order
         });
@@ -119,6 +119,10 @@ export default {
 }
 .kanban-column-body {
   padding: 5px;
+}
+.tasks-list > span{
+  display: block;
+  min-height: 20px;
 }
 .kanban-task {
   padding: 5px;

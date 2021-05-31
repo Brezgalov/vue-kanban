@@ -6,12 +6,13 @@
       v-bind="columnDragOptions"
       @start="columnDragStart"
       @end="columnDragEnd"
-      @change="updateListSortOrder"
+      @change="updateColumn"
     >
       <transition-group type="transition">
         <column 
           v-for="column in dataColumns" 
           :key="column.id"
+          :id="column.id"
           :name="column.name"
           :order="column.order"
           :tasks="getTasksForColumn(column.id)"
@@ -61,8 +62,9 @@ export default {
     columnDragStart() {
     },
     columnDragEnd() {
+      
     },
-    updateListSortOrder() {
+    updateColumn() {
       const newList = [...this.dataColumns].map((item, index) => {
         const newSort = index + 1;
         // also add in a new property called has changed if you want to style them / send an api call

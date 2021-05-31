@@ -8,11 +8,12 @@
         v-bind="taskDragOptions"
         @start="taskDragStart"
         @end="taskDragEnd"
+        @change="updateTask"
       >
         <transition-group type="transition">
             <template v-for="task in dataTasks">
               <div class="kanban-task" :key="task.id">
-                <div class="kanban-task-head">{{ task.title }} ({{ task.order }})</div>
+                <div class="kanban-task-head">ColumnID: {{task.column_id}} / {{ task.title }} ({{ task.order }})</div>
                 <div class="kanban-task-body">{{ task.description }}</div>
               </div>
             </template>
@@ -32,6 +33,7 @@ export default {
     this.dataTasks = this.tasks;
   },
   props: {
+    id: Number,
     name: String,
     order: Number,
     tasks: Array,
@@ -57,6 +59,15 @@ export default {
     taskDragStart() {
     },
     taskDragEnd() {
+    },
+    updateTask() {
+      const newList = [...this.dataTasks].map((item, index) => {     
+        item.order = index + 1;
+        item.column_id = this.id
+        return item;
+      });
+
+      this.dataTasks = newList;
     }
   }
 }
