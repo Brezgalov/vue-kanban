@@ -82,6 +82,7 @@ export default {
       this.columns.sort((a, b) => (a.order === b.order ? 0 : (a.order > b.order ? 1 : -1)));
     },
     test() {
+      this.$forceUpdate();
     }
   },
   computed: {
@@ -109,6 +110,7 @@ export default {
   margin-left: .5%;
   margin-right: .5%;
   border: 1px solid black;
+  height: fit-content;
 }
 .kanban-column-head {
   padding: 5px;

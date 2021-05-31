@@ -8,7 +8,7 @@
       @end="columnDragEnd"
       @change="updateListSortOrder"
     >
-      <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+      <transition-group type="transition">
         <column 
           v-for="column in dataColumns" 
           :key="column.id"
@@ -40,7 +40,6 @@ export default {
     return {
       dataColumns: [],
       dataTasks: [],
-      drag: false
     };
   },
   computed: {
@@ -60,11 +59,8 @@ export default {
       return this.dataTasks.filter(task => task.column_id === id);
     },
     columnDragStart() {
-      this.drag = true;
     },
     columnDragEnd() {
-      this.drag = false;
-      console.log(this.dataColumns);
     },
     updateListSortOrder() {
       const newList = [...this.dataColumns].map((item, index) => {
