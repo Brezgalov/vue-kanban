@@ -1,8 +1,12 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
 
-Vue.config.productionTip = false
+import App from './App.vue';
+
+Vue.config.productionTip = false;
+
+import store from './store/index.js';
 
 new Vue({
   render: h => h(App),
-}).$mount('#app')
+  store: store
+}).$mount('#vue-kanban');

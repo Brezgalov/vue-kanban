@@ -17,14 +17,14 @@ export default {
   data() {
     let columns = [
       {
-        id: 4,
-        name: 'Ready',
-        order: 3,
-      },
-      {
         id: 1,
         name: 'Waiting',
         order: 0,
+      },
+      {
+        id: 2,
+        name: 'Active',
+        order: 1,
       },
       {
         id: 3,
@@ -32,9 +32,9 @@ export default {
         order: 2,
       },
       {
-        id: 2,
-        name: 'Active',
-        order: 1,
+        id: 4,
+        name: 'Ready',
+        order: 3,
       },
     ];
 
@@ -78,6 +78,11 @@ export default {
     };
   },
   methods: {
+    init() {
+      console.log('init');
+      this.orderColumns();
+      this.$store.dispatch('init');
+    },
     orderColumns() {
       this.columns.sort((a, b) => (a.order === b.order ? 0 : (a.order > b.order ? 1 : -1)));
     },
@@ -89,7 +94,7 @@ export default {
     
   },
   mounted() {
-    this.orderColumns();
+    this.init();
     // axios
     //   .get('https://api.coindesk.com/v1/bpi/currentprice.json')
     //   .then(response => (this.info = response));
