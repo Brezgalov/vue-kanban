@@ -7,11 +7,10 @@ import tasks from './modules/tasks.js';
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  strict: true,
   modules: {
     columns,
     tasks,
-  },
-  state: {
   },
   actions: {
     init(context) {

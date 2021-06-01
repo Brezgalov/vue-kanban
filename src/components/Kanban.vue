@@ -2,7 +2,7 @@
   <div>
     <draggable
       class="kanban-sheet"
-      v-model="dataColumns"
+      v-model="columns"
       v-bind="columnDragOptions"
       @start="columnDragStart"
       @end="columnDragEnd"
@@ -10,12 +10,11 @@
     >
       <transition-group type="transition">
         <column 
-          v-for="column in dataColumns" 
+          v-for="column in columns" 
           :key="column.id"
           :id="column.id"
           :name="column.name"
           :order="column.order"
-          :tasks="getTasksForColumn(column.id)"
         ></column>
       </transition-group>
     </draggable>
@@ -29,21 +28,15 @@ import Column from './kanban/Column.vue';
 export default {
   components: { Column, draggable },
   name: 'Kanban',
-  props: {
-    columns: Array,
-    tasks: Array,
-  },
-  mounted() {
-    this.dataColumns = this.columns;
-    this.dataTasks = this.tasks;
-  },
-  data() {
-    return {
-      dataColumns: [],
-      dataTasks: [],
-    };
-  },
   computed: {
+    columns: {
+      get() {
+        return [...this.$store.state.columns.items];
+      },
+      set(value) {
+        this.$store.dispatch('columns/setItems', value);
+      }      
+    },
     columnDragOptions() {
       return {
         animation: 200,
@@ -56,26 +49,28 @@ export default {
     }
   },
   methods: {
-    getTasksForColumn(id) {
-      return this.dataTasks.filter(task => task.column_id === id);
-    },
     columnDragStart() {
+      console.log('start');
     },
     columnDragEnd() {
-      
+      console.log('end');
     },
     updateColumn() {
-      const newList = [...this.dataColumns].map((item, index) => {
+      console.log('changeEvent');
+      
+      this.columns.map((item, index) => {
         const newSort = index + 1;
         // also add in a new property called has changed if you want to style them / send an api call
-        item.hasChanged = item.order !== newSort;
-        if (item.hasChanged) {
-          item.order = newSort;
+        let hasChanged = item.order !== newSort;
+
+        console.log(item, hasChanged, item.order, newSort);
+        if (hasChanged) {
+          // item.order = newSort;
+          this.$store.dispatch('columns/setColumn', {id: item.id, order: newSort});
         }
+
         return item;
       });
-
-      this.dataColumns = newList;
     },
   }
 }

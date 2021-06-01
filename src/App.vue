@@ -2,7 +2,7 @@
   <div>
     <img alt="Vue logo" src="./assets/logo.png">
     <button @click="test" >Test</button>
-    <Kanban :tasks="tasks" :columns="columns"/>
+    <Kanban/>
   </div>
 </template>
 
@@ -15,79 +15,18 @@ export default {
     Kanban
   },
   data() {
-    let columns = [
-      {
-        id: 1,
-        name: 'Waiting',
-        order: 0,
-      },
-      {
-        id: 2,
-        name: 'Active',
-        order: 1,
-      },
-      {
-        id: 3,
-        name: 'Testing',
-        order: 2,
-      },
-      {
-        id: 4,
-        name: 'Ready',
-        order: 3,
-      },
-    ];
-
-    let tasks = [];
-    let tasksIdIncrement = 1;
-    let tasksPattern = [
-        {
-          title: "Task 1",
-          description: "lorem ipsum dollar sit amet",
-          order: 1
-        },
-        {
-          title: "Task 2",
-          description: "lorem ipsum dollar sit amet",
-          order: 2
-        },
-        {
-          title: "Task 3",
-          description: "lorem ipsum dollar sit amet",
-          order: 3
-        },
-    ];
-
-    columns.forEach(function(column) {
-      tasksPattern.forEach(function(taskPattern) {
-        tasks.push({
-          id: tasksIdIncrement++,
-          column_id: column.id,
-          title: "Column #" + column.name + " / " + taskPattern.title,
-          description: taskPattern.description,
-          order: taskPattern.order
-        });
-      });
-    });
-
     return {
-      columns: columns,
-      tasks: tasks,
+      columns: [],
+      tasks: [],
       accessToken: "123",
       apiBaseUrl: "321"
     };
   },
   methods: {
     init() {
-      console.log('init');
-      this.orderColumns();
       this.$store.dispatch('init');
     },
-    orderColumns() {
-      this.columns.sort((a, b) => (a.order === b.order ? 0 : (a.order > b.order ? 1 : -1)));
-    },
     test() {
-      this.$forceUpdate();
     }
   },
   computed: {
