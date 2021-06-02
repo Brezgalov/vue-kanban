@@ -1,9 +1,13 @@
 export default {
     namespaced: true,
     state: {
+        loaded: false,
         items: [],
     },
     getters: {
+      loaded(state) {
+        return state.loaded;
+      },
       getById(state) {
         return (id) => {
           let result = state.items.filter(item => item.id === id);
@@ -13,6 +17,9 @@ export default {
       }
     },
     mutations: {
+      setLoaded(state, value) {
+        state.loaded = value;
+      },
       setItems(state, data) {
         state.items = data;
       },
@@ -20,9 +27,8 @@ export default {
         if (column.id) {
           let columnFound = this.getters['columns/getById'](column.id);
           
-          console.log('seyup', {column, columnFound});
-          
           // update column in array
+          columnFound.order = column.order;
         }        
       }
     },
@@ -52,6 +58,8 @@ export default {
             order: 4,
           },         
         ]); 
+
+        context.commit('setLoaded', true);
       },
       setColumn(context, data) {
         console.log('api call setColumn', data);
@@ -60,9 +68,8 @@ export default {
 
         // api call for update
       },
-      setItems(context, data) {
-        console.log('api call setItems', data);
-
+      setItemsLocal(context, data) {
+        // no api call, mutation only
         context.commit('setItems', data);
       }
     }

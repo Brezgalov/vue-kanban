@@ -4,8 +4,6 @@
       class="kanban-sheet"
       v-model="columns"
       v-bind="columnDragOptions"
-      @start="columnDragStart"
-      @end="columnDragEnd"
       @change="updateColumn"
     >
       <transition-group type="transition">
@@ -34,7 +32,10 @@ export default {
         return [...this.$store.state.columns.items];
       },
       set(value) {
-        this.$store.dispatch('columns/setItems', value);
+        // Здесь сохраняем локально пересортированный список
+        // order изменится в соответствии с положением в списке по событию change
+        // поэтому вызов апи пойдет оттуда, тут только локальный стор
+        this.$store.dispatch('columns/setItemsLocal', value);
       }      
     },
     columnDragOptions() {
@@ -49,23 +50,13 @@ export default {
     }
   },
   methods: {
-    columnDragStart() {
-      console.log('start');
-    },
-    columnDragEnd() {
-      console.log('end');
-    },
-    updateColumn() {
-      console.log('changeEvent');
-      
+    updateColumn() {      
       this.columns.map((item, index) => {
         const newSort = index + 1;
         // also add in a new property called has changed if you want to style them / send an api call
         let hasChanged = item.order !== newSort;
 
-        console.log(item, hasChanged, item.order, newSort);
         if (hasChanged) {
-          // item.order = newSort;
           this.$store.dispatch('columns/setColumn', {id: item.id, order: newSort});
         }
 
@@ -75,8 +66,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  
-</style>

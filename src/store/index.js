@@ -18,6 +18,11 @@ export default new Vuex.Store({
       context.dispatch('tasks/fetchAll');
     }
   },
+  getters: {
+    loaded(state, getters) {
+      return getters['columns/loaded'];
+    }
+  }
 });
 
 
