@@ -53,10 +53,8 @@ export default {
     updateColumn() {      
       this.columns.map((item, index) => {
         const newSort = index + 1;
-        // also add in a new property called has changed if you want to style them / send an api call
-        let hasChanged = item.order !== newSort;
 
-        if (hasChanged) {
+        if (item.order !== newSort) {
           this.$store.dispatch('columns/setColumn', {id: item.id, order: newSort});
         }
 

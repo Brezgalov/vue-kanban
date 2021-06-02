@@ -23,12 +23,18 @@ export default {
       setItems(state, data) {
         state.items = data;
       },
-      setColumn(state, column) {
-        if (column.id) {
-          let columnFound = this.getters['columns/getById'](column.id);
+      setColumn(state, newColumnData) {
+        if (newColumnData.id) {
+          let columnFound = this.getters['columns/getById'](newColumnData.id);
           
           // update column in array
-          columnFound.order = column.order;
+          for (let prop in newColumnData) {
+            if (prop === 'id') {
+              continue;
+            }
+
+            columnFound[prop] = newColumnData[prop];
+          }        
         }        
       }
     },
@@ -68,9 +74,9 @@ export default {
 
         // api call for update
       },
-      setItemsLocal(context, data) {
+      setItemsLocal(context, payload) {
         // no api call, mutation only
-        context.commit('setItems', data);
+        context.commit('setItems', payload);
       }
     }
   }
