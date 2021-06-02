@@ -5,6 +5,12 @@ export default {
         items: [],
     },
     getters: {
+      byId(state) {
+        return (id) => {
+          let result = state.items.filter(item => item.id == id);
+          return result.length > 0 ? result[0] : null;
+        };
+      },
       byColumn(state) {
         return (columnId) => state.items.filter(item => item.column_id == columnId);
       },
@@ -29,6 +35,27 @@ export default {
       },
       setLoaded(state, value) {
         state.loaded = value;
+      },
+      setTask(state, data) {
+        let taskFound = this.getters['tasks/byId'](data.id);
+console.log('tf', taskFound);
+        if (taskFound) {
+          for(let prop in data) {
+            if (prop === 'id') {
+              continue;
+            }
+
+            taskFound[prop] = data[prop];
+            console.log('tf', taskFound);
+          }
+        } else {
+          state.items.push(data);
+        }
+
+        this.commit('tasks/orderTasks');
+      },
+      orderTasks(state) {
+        state.items.sort((a, b) => (a.order === b.order ? 0 : (a.order > b.order ? 1 : -1)));
       }
     },
     actions: {
@@ -64,5 +91,13 @@ export default {
       addItemsLocal(context, payload) {
         context.commit('addItems', payload);
       },
+      setItems(context, payload) {
+        context.commit('setItems', payload);
+      },
+      setTask(context, data) {
+        console.log('api call updateTask', data);
+
+        context.commit('setTask', data);
+      }
     },
   }

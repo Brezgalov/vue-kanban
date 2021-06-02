@@ -4,12 +4,12 @@
     <div class="kanban-column-body">
       <draggable 
         class="tasks-list"
-        v-model="tasks"
+        v-model="localTasks"
         v-bind="taskDragOptions"
         @change="updateTask"
       >
         <transition-group type="transition">
-            <template v-for="task in tasks">
+            <template v-for="task in localTasks">
               <div class="kanban-task" :key="task.id">
                 <div class="kanban-task-head">ColumnID: {{task.column_id}} / {{ task.title }} ({{ task.order }})</div>
                 <div class="kanban-task-body">{{ task.description }}</div>
@@ -34,6 +34,16 @@ export default {
     tasks: Array,
   },
   computed: {
+    localTasks: {
+      get() {
+        return this.tasks;
+      },
+      set(value) {
+        if (value.length > 0) {
+          value.forEach((task) => this.$store.dispatch('tasks/setTask', {id: task.id, column_id: this.id}));
+        }        
+      }
+    },
     taskDragOptions() {
       return {
         animation: 200,
@@ -48,11 +58,26 @@ export default {
   methods: {
     updateTask() {
       this.tasks.map((item, index) => {     
-        item.order = index + 1;
-        item.column_id = this.id
+        let newOrder = index + 1;
+
+        if (item.order != newOrder || item.column_id != this.id) {
+          console.log('tasks/setTask', {
+            id: item.id,
+            order: newOrder,
+            column_id: this.id,
+          });
+          // item.order = newOrder;
+          // item.column_id = this.id;
+          this.$store.dispatch('tasks/setTask', {
+            id: item.id,
+            order: newOrder,
+            column_id: this.id,
+          });
+        }
+
         return item;
       });
     }
-  }
+  }  
 }
 </script>

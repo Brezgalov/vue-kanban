@@ -22,11 +22,13 @@ export default {
       },
       setItems(state, data) {
         state.items = data;
+
+        this.commit('columns/orderColumns');
       },
       setColumn(state, newColumnData) {
-        if (newColumnData.id) {
-          let columnFound = this.getters['columns/getById'](newColumnData.id);
-          
+        let columnFound = this.getters['columns/getById'](newColumnData.id);
+
+        if (columnFound) {
           // update column in array
           for (let prop in newColumnData) {
             if (prop === 'id') {
@@ -35,8 +37,15 @@ export default {
 
             columnFound[prop] = newColumnData[prop];
           }        
-        }        
-      }
+        } else {
+          state.items.push(newColumnData);
+        }    
+
+        this.commit('columns/orderColumns');
+      },
+      orderColumns(state) {
+        state.items.sort((a, b) => (a.order === b.order ? 0 : (a.order > b.order ? 1 : -1)));
+      },
     },
     actions: {
       fetchAll(context) {
