@@ -4,12 +4,12 @@
     <div class="kanban-column-body">
       <draggable 
         class="tasks-list"
-        v-model="dataTasks"
+        v-model="tasks"
         v-bind="taskDragOptions"
         @change="updateTask"
       >
         <transition-group type="transition">
-            <template v-for="task in dataTasks">
+            <template v-for="task in tasks">
               <div class="kanban-task" :key="task.id">
                 <div class="kanban-task-head">ColumnID: {{task.column_id}} / {{ task.title }} ({{ task.order }})</div>
                 <div class="kanban-task-body">{{ task.description }}</div>
@@ -27,10 +27,6 @@ import draggable from "vuedraggable";
 export default {
   name: 'Column',
   components: { draggable },
-  mounted() {
-    console.log(this.tasks)
-    this.dataTasks = this.tasks;
-  },
   props: {
     id: Number,
     name: String,
@@ -49,20 +45,13 @@ export default {
       };
     }
   },
-  data() {
-    return {
-      dataTasks: [],
-    };
-  },
   methods: {
     updateTask() {
-      const newList = [...this.dataTasks].map((item, index) => {     
+      this.tasks.map((item, index) => {     
         item.order = index + 1;
         item.column_id = this.id
         return item;
       });
-
-      this.dataTasks = newList;
     }
   }
 }
