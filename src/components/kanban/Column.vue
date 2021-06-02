@@ -6,8 +6,6 @@
         class="tasks-list"
         v-model="dataTasks"
         v-bind="taskDragOptions"
-        @start="taskDragStart"
-        @end="taskDragEnd"
         @change="updateTask"
       >
         <transition-group type="transition">
@@ -30,6 +28,7 @@ export default {
   name: 'Column',
   components: { draggable },
   mounted() {
+    console.log(this.tasks)
     this.dataTasks = this.tasks;
   },
   props: {
@@ -56,10 +55,6 @@ export default {
     };
   },
   methods: {
-    taskDragStart() {
-    },
-    taskDragEnd() {
-    },
     updateTask() {
       const newList = [...this.dataTasks].map((item, index) => {     
         item.order = index + 1;

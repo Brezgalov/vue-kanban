@@ -1,7 +1,35 @@
 export default {
     namespaced: true,
     state: {
+        loaded: false,
         items: [],
+    },
+    getters: {
+      byColumn(state) {
+        return (columnId) => state.items.filter(item => item.column_id == columnId);
+      },
+      loaded(state) {
+        return state.loaded;
+      }
+    },
+    mutations: {
+      setItems(state, data) {
+        state.items = data;
+      },
+      addItems(state, taksPayload) {
+        taksPayload.forEach(function(task) {
+          let indexFound = state.items.findIndex(function(i) {
+            return i.id === task.id;
+          });
+
+          state.items.splice(indexFound, 1);
+
+          state.items.push(task);
+        });
+      },
+      setLoaded(state, value) {
+        state.loaded = value;
+      }
     },
     actions: {
       fetchAll(context) {
@@ -30,16 +58,11 @@ export default {
             title:"Task 3",
           },
         ]);
-      }
+
+        context.commit('setLoaded', true);
+      },
+      addItemsLocal(context, payload) {
+        context.commit('addItems', payload);
+      },
     },
-    mutations: {
-      setItems(state, data) {
-        state.items = data;
-       }
-    },
-    getters: {
-      byColumn(state, columnId) {
-        return state.items.filter(item => item.column_id === columnId);
-      }
-    }
   }

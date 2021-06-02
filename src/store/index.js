@@ -20,7 +20,7 @@ export default new Vuex.Store({
   },
   getters: {
     loaded(state, getters) {
-      return getters['columns/loaded'];
+      return getters['columns/loaded'] && getters['tasks/loaded'];
     }
   }
 });

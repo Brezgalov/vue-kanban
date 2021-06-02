@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="ready">
     <draggable
       class="kanban-sheet"
       v-model="columns"
@@ -13,6 +13,7 @@
           :id="column.id"
           :name="column.name"
           :order="column.order"
+          :tasks="tasksForColumn(column.id)"
         ></column>
       </transition-group>
     </draggable>
@@ -27,6 +28,9 @@ export default {
   components: { Column, draggable },
   name: 'Kanban',
   computed: {
+    ready() {
+      return this.$store.getters['loaded'];
+    },
     columns: {
       get() {
         return [...this.$store.state.columns.items];
@@ -37,6 +41,9 @@ export default {
         // поэтому вызов апи пойдет оттуда, тут только локальный стор
         this.$store.dispatch('columns/setItemsLocal', value);
       }      
+    },
+    tasksForColumn() {
+      return (columnId) => this.$store.getters['tasks/byColumn'](columnId);
     },
     columnDragOptions() {
       return {
